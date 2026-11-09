@@ -5,6 +5,8 @@ import com.flow.statusflow.usecase.DeleteServiceUseCase;
 import com.flow.statusflow.usecase.FindAllServicesUseCase;
 import com.flow.statusflow.usecase.FindServiceByIdUseCase;
 import com.flow.statusflow.usecase.RegisterServiceUseCase;
+import com.flow.statusflow.usecase.UpdateServiceUseCase;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/services")
 public class ServiceController {
-
+    
+    private final UpdateServiceUseCase updateServiceUseCase;
     private final RegisterServiceUseCase registerServiceUseCase;
     private final FindAllServicesUseCase findAllServicesUseCase;
     private final FindServiceByIdUseCase findServiceByIdUseCase;
@@ -23,10 +26,12 @@ public class ServiceController {
     public ServiceController(RegisterServiceUseCase registerServiceUseCase,
                             FindAllServicesUseCase findAllServicesUseCase,
                             FindServiceByIdUseCase findServiceByIdUseCase,
+                            UpdateServiceUseCase updateServiceUseCase,
                             DeleteServiceUseCase deleteServiceUseCase) {
         this.registerServiceUseCase = registerServiceUseCase;
         this.findAllServicesUseCase = findAllServicesUseCase;
         this.findServiceByIdUseCase = findServiceByIdUseCase;
+        this.updateServiceUseCase = updateServiceUseCase;
         this.deleteServiceUseCase = deleteServiceUseCase;
     }
 
@@ -50,6 +55,14 @@ public class ServiceController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MonitoredService> update(@PathVariable Long id,
+        @RequestBody ServiceRequestDTO request) {
+            return updateServiceUseCase.execute(id, request.name(), request.url())
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+        }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

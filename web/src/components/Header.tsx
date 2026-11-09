@@ -1,8 +1,4 @@
-import type { ReactNode } from "react";
-
-type HeaderProps = {
-    children?: ReactNode;
-};
+import type { HeaderProps } from "../types/service"
 
 export default function Header({ children }: HeaderProps) {
     return (

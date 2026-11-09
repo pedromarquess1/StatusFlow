@@ -13,6 +13,10 @@ public class MonitoredService {
             throw new IllegalArgumentException("A URL do serviço não pode ser nula ou vazia.");
         }
 
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("O nome do serviço não pode ser nulo ou vazio.");
+        }
+
         this.id = id;
         this.name = name;
         this.url = url;

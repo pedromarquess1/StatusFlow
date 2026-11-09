@@ -13,7 +13,7 @@ export function useServices(intervalMs = 15_000) {
             setData(services);
             setIsError(false);
         } catch {
-            if (signal?.aborted) return; // requisição cancelada, não é erro
+            if (signal?.aborted) return;
             setIsError(true);
         } finally {
             if (!signal?.aborted) setIsLoading(false);
@@ -32,10 +32,7 @@ export function useServices(intervalMs = 15_000) {
         };
     }, [load, intervalMs]);
 
-    const refetch = useCallback(() => {
-        setIsLoading(true);
-        load();
-    }, [load]);
+    const refetch = useCallback(() => load(), [load]);
 
     return { data, isLoading, isError, refetch };
 }
